@@ -20,6 +20,9 @@ func main() {
 	mux.HandleFunc("/about", aboutHandler)
 	mux.HandleFunc("/product", handler.ProductHandler)
 
+	fileServer := http.FileServer(http.Dir("assets"))
+	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
+
 	mux.HandleFunc("/profile", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Profile Page"))
 	})

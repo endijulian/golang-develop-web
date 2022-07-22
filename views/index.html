@@ -2,11 +2,20 @@
 
 {{ define "main" }}
 
-<div class="text">
-    {{ .Id }} <br>
+
+{{ range . }}
+<div class="text box-with-shadow">
+    <!-- {{ .Id }} <br>
     {{ .Nama }} <br>
     {{ .Price }} <br>
-    {{ .Stock }}
+    {{ .Stock }} -->
+
+        {{ .Nama }} - {{ .Price }} - {{ .Stock }} - {{ .StockStatus }}
+
+        <!-- {{ if lt .Stock 3 }}
+            Stock hampir habis
+        {{ end }} -->
 </div>
+{{ end }}
 
 {{ end }}

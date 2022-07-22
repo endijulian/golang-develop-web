@@ -1,8 +1,10 @@
 package handler
 
 import (
-	"fmt"
+	"html/template"
+	"log"
 	"net/http"
+	"path"
 	"strconv"
 )
 
@@ -11,7 +13,27 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		return
 	}
-	w.Write([]byte("Welcome to page HOME"))
+	// w.Write([]byte("Welcome to page HOME"))
+	tmpl, err := template.ParseFiles(path.Join("views", "index.html"), path.Join("views", "layout.html"))
+
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Terjadi kesalahan", http.StatusInternalServerError)
+		return
+	}
+
+	data := map[string]interface{}{
+		"title":   "Endi Julian",
+		"content": "Saya sedang belajar golang",
+		"Umur":    20,
+	}
+
+	err = tmpl.Execute(w, data)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Terjadi kesalahan", http.StatusInternalServerError)
+		return
+	}
 }
 
 func HelloHandler(w http.ResponseWriter, r *http.Request) {
@@ -33,6 +55,23 @@ func ProductHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// w.Write([]byte("Page Product"))
+	// fmt.Fprintf(w, "Product Page : %d", idNumb)
 
-	fmt.Fprintf(w, "Product Page : %d", idNumb)
+	data := map[string]interface{}{
+		"content": idNumb,
+	}
+
+	tmpl, err := template.ParseFiles(path.Join("views", "product.html"), path.Join("views", "layout.html"))
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Terjadi kesalahan", http.StatusInternalServerError)
+		return
+	}
+
+	err = tmpl.Execute(w, data)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Terjadi kesalahan", http.StatusInternalServerError)
+		return
+	}
 }
